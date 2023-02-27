@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <AssemblyName>J4JSoftware.J4JLoggerTwilio</AssemblyName>
+	  <RootNamespace>J4JSoftware.Logging</RootNamespace>
+	  <Authors>Mark A. Olbert</Authors>
+	  <Company>Jump for Joy Software</Company>
+	  <Product>J4JSoftware Twilio Serilog Sink</Product>
+	  <Description>Enables tweeting log events via Twilio</Description>
+	  <Copyright>© Mark A. Olbert all rights reserved</Copyright>
+	  <PackageDescription>Enables tweeting log events via Twilio</PackageDescription>
+	  <RepositoryUrl>https://github.com/markolbert/J4JLoggerEnhancements.git</RepositoryUrl>
+	  <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <PackageIcon>Diego nuspec.png</PackageIcon>
+	  <RepositoryType>git</RepositoryType>
+	  <Version>0.5.0.0</Version>
+	  <AssemblyVersion>0.5.0.0</AssemblyVersion>
+	  <PackageReleaseNotes>initial release</PackageReleaseNotes>
+	  <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="docs\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\Media\JumpForJoy\Diego nuspec.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="../readme.md" Pack="true" PackagePath="/readme.md" />
+		<None Include="../LICENSE.md" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\J4JLoggerEnhancements\J4JLoggerEnhancements.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Twilio" Version="6.2.0" />
+	</ItemGroup>
+
+</Project>
