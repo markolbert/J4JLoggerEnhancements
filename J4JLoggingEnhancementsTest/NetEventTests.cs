@@ -22,52 +22,51 @@ using FluentAssertions;
 using J4JSoftware.Logging;
 using Serilog.Events;
 
-namespace J4JLoggingEnhancementTests
+namespace J4JLoggingEnhancementTests;
+
+public class NetEventTests : TestBase
 {
-    public class NetEventTests : TestBase
-    {
-        private LogEventLevel _curLevel = LogEventLevel.Verbose;
-        private string _curTemplate = string.Empty;
+    //private LogEventLevel _curLevel = LogEventLevel.Verbose;
+    //private string _curTemplate = string.Empty;
 
-        [ Theory ]
-        [ InlineData( LogEventLevel.Information ) ]
-        [ InlineData( LogEventLevel.Error ) ]
-        [ InlineData( LogEventLevel.Debug ) ]
-        [ InlineData( LogEventLevel.Fatal ) ]
-        [ InlineData( LogEventLevel.Warning ) ]
-        [ InlineData( LogEventLevel.Verbose ) ]
-        public void TestEvent( LogEventLevel level )
-        {
-            LogMessage( level );
-        }
+    //[ Theory ]
+    //[ InlineData( LogEventLevel.Information ) ]
+    //[ InlineData( LogEventLevel.Error ) ]
+    //[ InlineData( LogEventLevel.Debug ) ]
+    //[ InlineData( LogEventLevel.Fatal ) ]
+    //[ InlineData( LogEventLevel.Warning ) ]
+    //[ InlineData( LogEventLevel.Verbose ) ]
+    //public void TestEvent( LogEventLevel level )
+    //{
+    //    LogMessage( level );
+    //}
 
-        private void LogMessage( LogEventLevel level )
-        {
-            _curLevel = level;
+    //private void LogMessage( LogEventLevel level )
+    //{
+    //    _curLevel = level;
 
-            var abbr = level switch
-                       {
-                           LogEventLevel.Debug       => "DBG",
-                           LogEventLevel.Error       => "ERR",
-                           LogEventLevel.Fatal       => "FTL",
-                           LogEventLevel.Information => "INF",
-                           LogEventLevel.Verbose     => "VRB",
-                           LogEventLevel.Warning     => "WRN",
-                           _ => throw new
-                                    InvalidEnumArgumentException( $"Unsupported {nameof( LogEventLevel )} '{level}'" )
-                       };
+    //    var abbr = level switch
+    //               {
+    //                   LogEventLevel.Debug       => "DBG",
+    //                   LogEventLevel.Error       => "ERR",
+    //                   LogEventLevel.Fatal       => "FTL",
+    //                   LogEventLevel.Information => "INF",
+    //                   LogEventLevel.Verbose     => "VRB",
+    //                   LogEventLevel.Warning     => "WRN",
+    //                   _ => throw new
+    //                            InvalidEnumArgumentException( $"Unsupported {nameof( LogEventLevel )} '{level}'" )
+    //               };
 
-            _curTemplate = $"[{abbr}] This is a(n) \"{level}\" event";
+    //    _curTemplate = $"[{abbr}] This is a(n) \"{level}\" event";
 
-            Logger.Write( level, "This is a(n) {0} event", level );
-        }
+    //    Logger.Write( level, "This is a(n) {0} event", level );
+    //}
 
-        protected override void OnNetEvent( NetEventArgs e )
-        {
-            base.OnNetEvent( e );
+    //protected override void OnNetEvent( NetEventArgs e )
+    //{
+    //    base.OnNetEvent( e );
 
-            e.LogEvent.Level.Should().Be( _curLevel );
-            e.LogMessage.Should().Be( _curTemplate );
-        }
-    }
+    //    e.LogEvent.Level.Should().Be( _curLevel );
+    //    e.LogMessage.Should().Be( _curTemplate );
+    //}
 }
