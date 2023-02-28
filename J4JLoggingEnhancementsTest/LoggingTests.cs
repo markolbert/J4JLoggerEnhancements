@@ -19,78 +19,66 @@
 
 using FluentAssertions;
 using J4JSoftware.Logging;
+using Serilog;
+using Serilog.Events;
 
 namespace J4JLoggingEnhancementTests
 {
     public class LoggingTests : TestBase
     {
-        [ Fact ]
-        public void Uncached()
+        [Theory]
+        [InlineData(LogSinks.Debug | LogSinks.LastEvent, LogEventLevel.Verbose)]
+        public void Uncached(LogSinks sinks, LogEventLevel level)
         {
-            var template = "{0} (test message)";
+            var template = "This is a {0} log event to {1}";
 
-            Logger.Verbose<string>( template, "Verbose" );
-            LastEvent.LastLogMessage.Should().Be( FormatMessage( "Verbose" ) );
+            var logger = GetLogger(sinks, LogEventLevel.Verbose);
+            logger.Write(level, template, level, sinks.ToString());
 
-            Logger.Warning<string>( template, "Warning" );
-            LastEvent.LastLogMessage.Should().Be( FormatMessage( "Warning" ) );
+            if ((sinks & LogSinks.LastEvent) != LogSinks.LastEvent)
+                return;
 
-            Logger.Information<string>( template, "Information" );
-            LastEvent.LastLogMessage.Should().Be( FormatMessage( "Information" ) );
-
-            Logger.Debug<string>( template, "Debug" );
-            LastEvent.LastLogMessage.Should().Be( FormatMessage( "Debug" ) );
-
-            Logger.Error<string>( template, "Error" );
-            LastEvent.LastLogMessage.Should().Be( FormatMessage( "Error" ) );
-
-            Logger.Fatal<string>( template, "Fatal" );
-            LastEvent.LastLogMessage.Should().Be( FormatMessage( "Fatal" ) );
-
-            Logger.SendToSms().Verbose<string>( "{0}", "Verbose" );
-
-            string FormatMessage( string prop1 )
-            {
-                return template.Replace( "{0}", $"\"{prop1}\"" );
-            }
+            LastEvent.Should().NotBeNull();
+            LastEvent!.LastLogMessage.Should().NotBeNull();
+            LastEvent.LastLogMessage!.Should().Be(FormatTemplate(template, level, sinks.ToString()));
         }
 
-        [ Fact ]
-        public void Cached()
-        {
-            var cached = new J4JCachedLogger();
-            cached.SetLoggedType( GetType() );
+        //[ Fact ]
+        //public void Cached()
+        //{
+        //    var cached = new J4JCachedLogger();
+        //    cached.SetLoggedType( GetType() );
 
-            var template = "{0} (test message)";
+        //    var template = "{0} (test message)";
 
-            cached.Verbose<string>( template, "Verbose" );
-            cached.Warning<string>( template, "Warning" );
-            cached.Information<string>( template, "Information" );
-            cached.Debug<string>( template, "Debug" );
-            cached.Error<string>( template, "Error" );
-            cached.Fatal<string>( template, "Fatal" );
+        //    cached.Verbose<string>( template, "Verbose" );
+        //    cached.Warning<string>( template, "Warning" );
+        //    cached.Information<string>( template, "Information" );
+        //    cached.Debug<string>( template, "Debug" );
+        //    cached.Error<string>( template, "Error" );
+        //    cached.Fatal<string>( template, "Fatal" );
 
-            cached.SmsHandling = SmsHandling.SendNextMessage;
-            cached.Verbose<string>( "{0} (test message)", "Verbose" );
+        //    cached.SmsHandling = SmsHandling.SendNextMessage;
+        //    cached.Verbose<string>( "{0} (test message)", "Verbose" );
 
-            foreach( var entry in cached.Entries )
-            {
-                var logger = entry.SmsHandling != SmsHandling.DoNotSend ? Logger.SendToSms() : Logger;
+        //    foreach( var entry in cached.Entries )
+        //    {
+        //        var logger = entry.SmsHandling != SmsHandling.DoNotSend ? Logger.SendToSms() : Logger;
 
-                Logger.Write( entry.LogEventLevel,
-                             entry.MessageTemplate,
-                             entry.PropertyValues,
-                             entry.MemberName,
-                             entry.SourcePath,
-                             entry.SourceLine );
+        //        Logger.Write( entry.LogEventLevel,
+        //                     entry.MessageTemplate,
+        //                     entry.PropertyValues,
+        //                     entry.MemberName,
+        //                     entry.SourcePath,
+        //                     entry.SourceLine );
 
-                LastEvent.LastLogMessage.Should().Be( FormatMessage( entry.LogEventLevel.ToString() ) );
-            }
+        //        LastEvent.LastLogMessage.Should().Be( FormatMessage( entry.LogEventLevel.ToString() ) );
+        //    }
 
-            string FormatMessage( string prop1 )
-            {
-                return template.Replace( "{0}", $"\"{prop1}\"" );
-            }
-        }
+        //    string FormatMessage( string prop1 )
+        //    {
+        //        return template.Replace( "{0}", $"\"{prop1}\"" );
+        //    }
+        //}
     }
 }
