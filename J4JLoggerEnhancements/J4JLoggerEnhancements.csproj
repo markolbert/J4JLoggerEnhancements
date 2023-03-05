@@ -24,16 +24,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="enrichers\**" />
-		<EmbeddedResource Remove="enrichers\**" />
-		<None Remove="enrichers\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Remove="J4JLoggerConfiguration.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Folder Include="docs\" />
 	</ItemGroup>
 
