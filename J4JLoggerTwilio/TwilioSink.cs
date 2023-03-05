@@ -15,19 +15,30 @@
 // You should have received a copy of the GNU General Public License along 
 // with J4JLogger. If not, see <https://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Serilog.Formatting;
 using Twilio.Rest.Api.V2010.Account;
 
 namespace J4JSoftware.Logging
 {
     public class TwilioSink : SmsSink
     {
-        public TwilioSink( string fromNumber,
-                           IEnumerable<string> recipientNumbers,
-                           string outputTemplate )
-            : base( outputTemplate )
+        public TwilioSink(
+            string outputTemplate,
+            string fromNumber,
+            IEnumerable<string> recipientNumbers
+        )
+            : base(outputTemplate)
+        {
+            FromNumber = fromNumber;
+            RecipientNumbers = recipientNumbers.ToList();
+        }
+
+        public TwilioSink(
+            ITextFormatter formatter,
+            string fromNumber,
+            IEnumerable<string> recipientNumbers
+        )
+            : base(formatter)
         {
             FromNumber = fromNumber;
             RecipientNumbers = recipientNumbers.ToList();
@@ -42,7 +53,7 @@ namespace J4JSoftware.Logging
             if( !IsConfigured )
                 throw new ArgumentException( $"{nameof( TwilioSink )} is not configured" );
 
-            foreach( var rn in RecipientNumbers! )
+            foreach( var rn in RecipientNumbers )
             {
                 try
                 {

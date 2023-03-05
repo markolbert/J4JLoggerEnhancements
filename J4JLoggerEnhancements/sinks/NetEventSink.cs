@@ -25,17 +25,20 @@ namespace J4JSoftware.Logging;
 
 public class NetEventSink : ILogEventSink
 {
-    public const string DefaultTemplate =
-        "[{Level:u3}] {Message:lj}";
-
     private readonly StringBuilder _sb = new();
     private readonly StringWriter _stringWriter;
     private readonly ITextFormatter _textFormatter;
 
-    public NetEventSink( string outputTemplate = DefaultTemplate )
+    public NetEventSink( string outputTemplate )
     {
         _stringWriter = new StringWriter( _sb );
         _textFormatter = new MessageTemplateTextFormatter( outputTemplate );
+    }
+
+    public NetEventSink(ITextFormatter textFormatter)
+    {
+        _stringWriter = new StringWriter(_sb);
+        _textFormatter = textFormatter;
     }
 
     internal Action<NetEventArgs>? RaiseEvent { get; set; }

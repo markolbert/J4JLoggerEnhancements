@@ -28,12 +28,24 @@ public abstract class SmsSink : ILogEventSink
     private readonly StringBuilder _sb;
     private readonly StringWriter _stringWriter;
 
-    protected SmsSink( string template )
+    protected SmsSink( 
+        string template 
+        )
     {
         TextFormatter = new MessageTemplateTextFormatter( template );
 
         _sb = new StringBuilder();
         _stringWriter = new StringWriter( _sb );
+    }
+
+    protected SmsSink(
+        ITextFormatter formatter
+    )
+    {
+        TextFormatter = formatter;
+
+        _sb = new StringBuilder();
+        _stringWriter = new StringWriter(_sb);
     }
 
     public ITextFormatter TextFormatter { get; }
