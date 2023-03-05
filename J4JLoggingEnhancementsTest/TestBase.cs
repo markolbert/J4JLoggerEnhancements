@@ -19,6 +19,7 @@
 
 using System.ComponentModel;
 using FluentAssertions;
+using J4JLoggingEnhancementsTest;
 using J4JSoftware.Logging;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -26,21 +27,11 @@ using Serilog.Events;
 
 namespace J4JLoggingEnhancementTests;
 
-[Flags]
-public enum LogSinks
-{
-    Debug = 1 << 0,
-    NetEvent = 1 << 1,
-    LastEvent = 1 << 2,
-    Twilio = 1 << 3,
-
-    AllButTwilio = Debug | NetEvent | LastEvent,
-    All = Debug | NetEvent | LastEvent | Twilio,
-    None = 0
-}
-
 public class TestBase
 {
+    protected const string NoContextTemplate = "[{Level:u3}] {Message:lj}";
+    protected const string ContextTemplate = "[{Level:u3}] {Message:lj}{NewLine}{CallerName}{NewLine}{CallerSourcePath}:{LineNumber}";
+
     private readonly TwilioConfiguration _twilioConfig;
 
     protected TestBase()
@@ -51,9 +42,12 @@ public class TestBase
             .AddUserSecrets<LoggingTests>()
             .Build();
 
-        var tempTwilio = config.Get<TwilioConfiguration>();
+        var tempTwilio = new TwilioConfiguration();
+        var section = config.GetSection("Twilio");
+        section.Bind(tempTwilio);
         tempTwilio.Should().NotBeNull();
-        _twilioConfig = tempTwilio!;
+        tempTwilio.IsValid.Should().BeTrue();
+        _twilioConfig = tempTwilio;
     }
 
     private void LogEvent( object? sender, NetEventArgs e ) => OnNetEvent( e );
@@ -62,11 +56,11 @@ public class TestBase
     {
     }
 
-    protected ILogger GetLogger(LogSinks sinks, LogEventLevel minLevel)
+    protected ILogger GetLogger(LogSinks sinks, LogEventLevel minLevel, string outputTemplate )
     {
         LastEvent = null;
 
-        var retVal = minLevel switch
+        var loggerConfig = minLevel switch
         {
             LogEventLevel.Verbose => new LoggerConfiguration().MinimumLevel.Verbose(),
             LogEventLevel.Debug => new LoggerConfiguration().MinimumLevel.Debug(),
@@ -77,34 +71,48 @@ public class TestBase
             _ => throw new InvalidEnumArgumentException($"Unsupported {typeof(LogEventLevel)} '{minLevel}'")
         };
 
+        loggerConfig = loggerConfig.Enrich.FromLogContext()
+            .Enrich.WithSourcePathTrimmer(typeof(TestBase));
+
         if ((sinks & LogSinks.Debug) == LogSinks.Debug)
-            retVal = retVal.WriteTo.Debug(restrictedToMinimumLevel: minLevel);
+            loggerConfig = loggerConfig.WriteTo.Debug(minLevel, outputTemplate);
 
         if ((sinks & LogSinks.LastEvent) == LogSinks.LastEvent)
         {
-            retVal = retVal.WriteTo.LastEvent(out var temp, restrictedToMinimumLevel: minLevel);
+            loggerConfig = loggerConfig.WriteTo.LastEvent(out var temp, minLevel, outputTemplate);
             LastEvent = temp;
         }
 
         if ((sinks & LogSinks.NetEvent) == LogSinks.NetEvent)
-            retVal = retVal.WriteTo.NetEvent(restrictedToMinimumLevel: minLevel);
+            loggerConfig = loggerConfig.WriteTo.NetEvent(minLevel, outputTemplate);
 
         if ((sinks & LogSinks.Twilio) == LogSinks.Twilio)
-            retVal = retVal.WriteTo.Twilio(_twilioConfig, restrictedToMinimumLevel: minLevel);
+            loggerConfig = loggerConfig.WriteTo.Twilio(_twilioConfig, minLevel, outputTemplate);
 
-        return retVal.CreateLogger();
+        return loggerConfig.CreateLogger();
     }
 
-    protected string FormatTemplate(string template, params object[] args)
+    protected string FormatTemplate(string message, LogEventLevel level, params object[] args)
     {
+        var threeLetter = level switch
+        {
+            LogEventLevel.Verbose => "VRB",
+            LogEventLevel.Information => "INF",
+            LogEventLevel.Debug => "DBG",
+            LogEventLevel.Warning => "WRN",
+            LogEventLevel.Error => "ERR",
+            LogEventLevel.Fatal => "FTL",
+            _ => throw new InvalidEnumArgumentException($"Unsupported {typeof(LogEventLevel)} value '{level}'")
+        };
+
         for (var idx = 0; idx < args.Length; idx++)
         {
-            var replacement = args[idx] is string stringVal ? $"\"{stringVal}\"" : args[idx].ToString();
+            var replacement = args[idx] is string stringVal ? $"{stringVal}" : args[idx].ToString();
 
-            template = template.Replace($"{{{idx}}}", replacement);
+            message = message.Replace($"{{{idx}}}", replacement);
         }
 
-        return template;
+        return $"[{threeLetter}] {message}";
     }
 
     protected LastEventSink? LastEvent { get; private set; }

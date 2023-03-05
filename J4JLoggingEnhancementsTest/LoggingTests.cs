@@ -17,68 +17,54 @@
 
 #endregion
 
+using System.ComponentModel;
 using FluentAssertions;
+using J4JLoggingEnhancementTests;
 using J4JSoftware.Logging;
-using Serilog;
 using Serilog.Events;
 
-namespace J4JLoggingEnhancementTests
+namespace J4JLoggingEnhancementsTest;
+
+public class LoggingTests : TestBase
 {
-    public class LoggingTests : TestBase
+    [Theory]
+    [InlineData(LogSinks.Debug | LogSinks.LastEvent, LogEventLevel.Verbose)]
+    [InlineData(LogSinks.Debug | LogSinks.Twilio, LogEventLevel.Verbose)]
+    public void WithoutSourceCodeInfo(LogSinks sinks, LogEventLevel level)
     {
-        [Theory]
-        [InlineData(LogSinks.Debug | LogSinks.LastEvent, LogEventLevel.Verbose)]
-        public void Uncached(LogSinks sinks, LogEventLevel level)
-        {
-            var template = "This is a {0} log event to {1}";
+        var message = "This is a {0} log event to {1}";
 
-            var logger = GetLogger(sinks, LogEventLevel.Verbose);
-            logger.Write(level, template, level, sinks.ToString());
+        var logger = GetLogger(sinks, LogEventLevel.Verbose, NoContextTemplate);
+        logger.Write(level, message, level.ToString(), sinks.ToString());
 
-            if ((sinks & LogSinks.LastEvent) != LogSinks.LastEvent)
-                return;
+        if ((sinks & LogSinks.LastEvent) != LogSinks.LastEvent)
+            return;
 
-            LastEvent.Should().NotBeNull();
-            LastEvent!.LastLogMessage.Should().NotBeNull();
-            LastEvent.LastLogMessage!.Should().Be(FormatTemplate(template, level, sinks.ToString()));
-        }
+        LastEvent.Should().NotBeNull();
+        LastEvent!.LastLogMessage.Should().NotBeNull();
 
-        //[ Fact ]
-        //public void Cached()
-        //{
-        //    var cached = new J4JCachedLogger();
-        //    cached.SetLoggedType( GetType() );
+        var result = FormatTemplate(message, level, level, sinks.ToString());
+        LastEvent.LastLogMessage!.Should().Be(result);
+    }
 
-        //    var template = "{0} (test message)";
+    [Theory]
+    [InlineData(LogSinks.Debug | LogSinks.LastEvent, LogEventLevel.Verbose, "WithSourceCodeInfo", "LoggingTests.cs", 58 )]
+    [InlineData(LogSinks.Debug | LogSinks.Twilio, LogEventLevel.Verbose, "WithSourceCodeInfo", "LoggingTests.cs", 58)]
+    public void WithSourceCodeInfo(LogSinks sinks, LogEventLevel level, string callerName, string sourcePath, int lineNum)
+    {
+        var message = "This is a {0} log event to {1}";
 
-        //    cached.Verbose<string>( template, "Verbose" );
-        //    cached.Warning<string>( template, "Warning" );
-        //    cached.Information<string>( template, "Information" );
-        //    cached.Debug<string>( template, "Debug" );
-        //    cached.Error<string>( template, "Error" );
-        //    cached.Fatal<string>( template, "Fatal" );
+        var logger = GetLogger(sinks, LogEventLevel.Verbose, ContextTemplate);
+        logger.SourceCode().Write(level, message, level.ToString(), sinks.ToString());
 
-        //    cached.SmsHandling = SmsHandling.SendNextMessage;
-        //    cached.Verbose<string>( "{0} (test message)", "Verbose" );
+        if ((sinks & LogSinks.LastEvent) != LogSinks.LastEvent)
+            return;
 
-        //    foreach( var entry in cached.Entries )
-        //    {
-        //        var logger = entry.SmsHandling != SmsHandling.DoNotSend ? Logger.SendToSms() : Logger;
+        LastEvent.Should().NotBeNull();
+        LastEvent!.LastLogMessage.Should().NotBeNull();
 
-        //        Logger.Write( entry.LogEventLevel,
-        //                     entry.MessageTemplate,
-        //                     entry.PropertyValues,
-        //                     entry.MemberName,
-        //                     entry.SourcePath,
-        //                     entry.SourceLine );
-
-        //        LastEvent.LastLogMessage.Should().Be( FormatMessage( entry.LogEventLevel.ToString() ) );
-        //    }
-
-        //    string FormatMessage( string prop1 )
-        //    {
-        //        return template.Replace( "{0}", $"\"{prop1}\"" );
-        //    }
-        //}
+        var sourceMessage = $"{message}\r\n{callerName}\r\n{sourcePath}:{lineNum}";
+        var result = FormatTemplate(sourceMessage, level, level, sinks.ToString());
+        LastEvent.LastLogMessage!.Should().Be(result);
     }
 }
