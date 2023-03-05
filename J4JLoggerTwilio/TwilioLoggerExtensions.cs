@@ -18,16 +18,36 @@
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Events;
+using Serilog.Formatting;
 using Twilio;
 
 namespace J4JSoftware.Logging;
 
-public static class TwilioExtensions
+public static class TwilioLoggerExtensions
 {
     public static LoggerConfiguration Twilio(
         this LoggerSinkConfiguration sinkConfig,
         TwilioConfiguration configValues,
-        TemplateElements templateElements = TemplateElements.Sms,
+        LogEventLevel restrictedToMinimumLevel = LogEventLevel.Verbose,
+        string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+    )
+    {
+        if (!configValues.IsValid)
+            throw new ArgumentException("Twilio configuration values are invalid");
+
+        TwilioClient.Init(configValues.AccountSID!, configValues.AccountToken!);
+
+        var sink = new TwilioSink(outputTemplate, configValues.FromNumber!, configValues.Recipients!)
+        {
+            IsConfigured = true
+        };
+
+        return sinkConfig.Sink(sink, restrictedToMinimumLevel);
+    }
+    public static LoggerConfiguration Twilio(
+        this LoggerSinkConfiguration sinkConfig,
+        ITextFormatter formatter,
+        TwilioConfiguration configValues,
         LogEventLevel restrictedToMinimumLevel = LogEventLevel.Verbose
     )
     {
@@ -36,13 +56,12 @@ public static class TwilioExtensions
 
         TwilioClient.Init(configValues.AccountSID!, configValues.AccountToken!);
 
-        var sink = new TwilioSink(configValues.FromNumber!,
-            configValues.Recipients!,
-            templateElements.GetTemplate())
+        var sink = new TwilioSink(formatter, configValues.FromNumber!, configValues.Recipients!)
         {
             IsConfigured = true
         };
 
         return sinkConfig.Sink(sink, restrictedToMinimumLevel);
     }
+
 }
