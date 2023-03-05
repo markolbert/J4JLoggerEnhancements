@@ -107,8 +107,7 @@ public class TestBase
 
         for (var idx = 0; idx < args.Length; idx++)
         {
-            var replacement = args[idx] is string stringVal ? $"{stringVal}" : args[idx].ToString();
-
+            var replacement = $"\"{args[idx]}\"";
             message = message.Replace($"{{{idx}}}", replacement);
         }
 

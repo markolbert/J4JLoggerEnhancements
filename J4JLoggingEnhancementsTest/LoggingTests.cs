@@ -35,7 +35,7 @@ public class LoggingTests : TestBase
         var message = "This is a {0} log event to {1}";
 
         var logger = GetLogger(sinks, LogEventLevel.Verbose, NoContextTemplate);
-        logger.Write(level, message, level.ToString(), sinks.ToString());
+        logger.Write(level, message, level, sinks);
 
         if ((sinks & LogSinks.LastEvent) != LogSinks.LastEvent)
             return;
@@ -55,7 +55,7 @@ public class LoggingTests : TestBase
         var message = "This is a {0} log event to {1}";
 
         var logger = GetLogger(sinks, LogEventLevel.Verbose, ContextTemplate);
-        logger.SourceCode().Write(level, message, level.ToString(), sinks.ToString());
+        logger.SourceCode().Write(level, message, level, sinks);
 
         if ((sinks & LogSinks.LastEvent) != LogSinks.LastEvent)
             return;
