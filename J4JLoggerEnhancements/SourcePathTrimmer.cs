@@ -65,9 +65,7 @@ public class SourcePathTrimmer : ILogEventEnricher
     {
         var srcPathProp = logEvent.Properties
             .FirstOrDefault(x => x.Key == J4JLogger.CallerPathElementName)
-            .Value
-            .ToString()
-            .Trim('"');
+            .Value?.ToString().Trim('"');
 
         if (string.IsNullOrEmpty(srcPathProp))
             return;
