@@ -13,29 +13,14 @@ public static class J4JLogger
 
     private static readonly Dictionary<string, string?> AssemblySourceRoots = new();
 
-    public static bool IncludeSourceInfoInProduction { get; set; }
-
-    public static bool IncludeSourceInfo
-    {
-        get
-        {
-            var debugging = false;
-
-#if DEBUG
-            debugging = true;
-#endif
-
-            return debugging || IncludeSourceInfoInProduction;
-        }
-    }
-    
     public static ILogger SourceCode(
         this ILogger logger,
+        bool include = true,
         [CallerMemberName] string callerName = "",
         [CallerFilePath] string sourceFilePath = "",
         [CallerLineNumber] int sourceLineNumber = 0)
     {
-        if (!IncludeSourceInfo)
+        if (!include)
             return logger;
 
         var srcRoot = GetSourceRoot(callerName);
@@ -58,8 +43,6 @@ public static class J4JLogger
         return attr?.RootPath;
     }
 
-    public static ILogger SendToSms(this ILogger logger)
-    {
-        return logger.ForContext(SendToSmsElementName, true);
-    }
+    public static ILogger SendToSms(this ILogger logger, bool send = true) =>
+        send ? logger.ForContext(SendToSmsElementName, true) : logger;
 }
