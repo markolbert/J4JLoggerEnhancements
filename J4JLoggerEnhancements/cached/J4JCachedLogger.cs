@@ -17,6 +17,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Serilog;
 using Serilog.Events;
 
 // ReSharper disable ExplicitCallerInfoArgument
@@ -26,18 +27,18 @@ namespace J4JSoftware.Logging;
 
 public class J4JCachedLogger
 {
-    public event EventHandler<NetEventArgs>? LogEvent;
+    //public event EventHandler<NetEventArgs>? LogEvent;
 
-    public J4JCachedLogger()
-    {
-    }
+    //public J4JCachedLogger()
+    //{
+    //}
 
-    public J4JCachedLogger(NetEventSink netEventSink)
-    {
-        netEventSink.RaiseEvent = RaiseEvent;
-    }
+    //public J4JCachedLogger(NetEventSink netEventSink)
+    //{
+    //    netEventSink.RaiseEvent = RaiseEvent;
+    //}
 
-    private void RaiseEvent( NetEventArgs args ) => LogEvent?.Invoke( this, args );
+    //private void RaiseEvent( NetEventArgs args ) => LogEvent?.Invoke( this, args );
 
     #region Logged Type
 
@@ -56,6 +57,19 @@ public class J4JCachedLogger
 
     public List<CachedEntry> Entries { get; } = new();
 
+    public void OutputToLogger(ILogger logger)
+    {
+        foreach (var entry in Entries)
+        {
+            logger = logger.SourceCode(true, entry.CallerName, entry.CallerSourcePath, entry.LineNumber);
+
+            if (entry.SmsHandling != SmsHandling.DoNotSend)
+                logger = logger.SendToSms();
+
+            logger.Write(entry.LogEventLevel, entry.MessageTemplate, entry.PropertyValues);
+        }
+    }
+
     #region Write methods
 
     public void Write( LogEventLevel level,
@@ -72,8 +86,7 @@ public class J4JCachedLogger
         [CallerLineNumber] int srcLine = 0)
     where T0 : notnull
     {
-        Entries.Add(new CachedEntry(LoggedType,
-            level,
+        Entries.Add(new CachedEntry(level,
             template,
             memberName,
             srcPath,
@@ -105,8 +118,7 @@ public class J4JCachedLogger
         [CallerFilePath] string srcPath = "",
         [CallerLineNumber] int srcLine = 0)
     {
-        Entries.Add(new CachedEntry(LoggedType,
-            level,
+        Entries.Add(new CachedEntry(level,
             template,
             memberName,
             srcPath,
