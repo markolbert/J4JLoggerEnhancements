@@ -19,11 +19,11 @@ using Serilog.Events;
 
 namespace J4JSoftware.Logging;
 
-public record CachedEntry( Type? LoggedType,
+public record CachedEntry( 
     LogEventLevel LogEventLevel,
     string MessageTemplate,
-    string MemberName,
-    string SourcePath,
-    int SourceLine,
+    string CallerName,
+    string CallerSourcePath,
+    int LineNumber,
     SmsHandling SmsHandling,
     params object[] PropertyValues );
