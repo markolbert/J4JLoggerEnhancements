@@ -40,11 +40,11 @@ public class LoggingTests : TestBase
         if ((sinks & LogSinks.LastEvent) != LogSinks.LastEvent)
             return;
 
-        LastEvent.Should().NotBeNull();
-        LastEvent!.LastLogMessage.Should().NotBeNull();
+        LastEventSink.Should().NotBeNull();
+        LastEventSink!.LastLogMessage.Should().NotBeNull();
 
         var result = FormatTemplate(message, level, level, sinks.ToString());
-        LastEvent.LastLogMessage!.Should().Be(result);
+        LastEventSink.LastLogMessage!.Should().Be(result);
     }
 
     [Theory]
@@ -60,11 +60,11 @@ public class LoggingTests : TestBase
         if ((sinks & LogSinks.LastEvent) != LogSinks.LastEvent)
             return;
 
-        LastEvent.Should().NotBeNull();
-        LastEvent!.LastLogMessage.Should().NotBeNull();
+        LastEventSink.Should().NotBeNull();
+        LastEventSink!.LastLogMessage.Should().NotBeNull();
 
         var sourceMessage = $"{message}\r\n{callerName}\r\n{sourcePath}:{lineNum}";
         var result = FormatTemplate(sourceMessage, level, level, sinks.ToString());
-        LastEvent.LastLogMessage!.Should().Be(result);
+        LastEventSink.LastLogMessage!.Should().Be(result);
     }
 }

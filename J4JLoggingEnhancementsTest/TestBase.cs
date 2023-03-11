@@ -58,7 +58,8 @@ public class TestBase
 
     protected ILogger GetLogger(LogSinks sinks, LogEventLevel minLevel, string outputTemplate )
     {
-        LastEvent = null;
+        LastEventSink = null;
+        InMemorySink = null;
 
         var loggerConfig = minLevel switch
         {
@@ -77,10 +78,16 @@ public class TestBase
         if ((sinks & LogSinks.Debug) == LogSinks.Debug)
             loggerConfig = loggerConfig.WriteTo.Debug(minLevel, outputTemplate);
 
+        if ((sinks & LogSinks.InMemory) == LogSinks.InMemory)
+        {
+            loggerConfig = loggerConfig.WriteTo.InMemory(out var temp);
+            InMemorySink = temp;
+        }
+
         if ((sinks & LogSinks.LastEvent) == LogSinks.LastEvent)
         {
             loggerConfig = loggerConfig.WriteTo.LastEvent(out var temp, minLevel, outputTemplate);
-            LastEvent = temp;
+            LastEventSink = temp;
         }
 
         if ((sinks & LogSinks.NetEvent) == LogSinks.NetEvent)
@@ -114,5 +121,6 @@ public class TestBase
         return $"[{threeLetter}] {message}";
     }
 
-    protected LastEventSink? LastEvent { get; private set; }
+    protected LastEventSink? LastEventSink { get; private set; }
+    protected InMemorySink? InMemorySink { get; private set; }
 }
