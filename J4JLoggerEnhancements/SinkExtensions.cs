@@ -7,6 +7,13 @@ namespace J4JSoftware.Logging;
 
 public static class SinkExtensions
 {
+    public static LoggerConfiguration InMemory(this LoggerSinkConfiguration config, out InMemorySink sink )
+    {
+        sink = new InMemorySink();
+
+        return config.Sink(sink, LogEventLevel.Verbose);
+    }
+
     public static LoggerConfiguration LastEvent(this LoggerSinkConfiguration loggerConfig,
         out LastEventSink sink,
         LogEventLevel restrictedToMinimumLevel = LogEventLevel.Verbose,
