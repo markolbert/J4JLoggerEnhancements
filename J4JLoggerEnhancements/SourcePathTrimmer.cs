@@ -64,7 +64,7 @@ public class SourcePathTrimmer : ILogEventEnricher
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
         var srcPathProp = logEvent.Properties
-            .FirstOrDefault(x => x.Key == J4JLogger.CallerPathElementName)
+            .FirstOrDefault(x => x.Key == LoggerExtensions.CallerPathElementName)
             .Value?.ToString().Trim('"');
 
         if (string.IsNullOrEmpty(srcPathProp))
@@ -90,6 +90,6 @@ public class SourcePathTrimmer : ILogEventEnricher
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static LogEventProperty UpdateProperty(ILogEventPropertyFactory propertyFactory, string curPath)
     {
-        return propertyFactory.CreateProperty(J4JLogger.CallerPathElementName, curPath);
+        return propertyFactory.CreateProperty(LoggerExtensions.CallerPathElementName, curPath);
     }
 }

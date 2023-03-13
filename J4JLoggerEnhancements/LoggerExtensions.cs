@@ -4,7 +4,7 @@ using Serilog;
 
 namespace J4JSoftware.Logging;
 
-public static class J4JLogger
+public static class LoggerExtensions
 {
     public const string CallerMemberElementName = "CallerName";
     public const string CallerPathElementName = "CallerSourcePath";
