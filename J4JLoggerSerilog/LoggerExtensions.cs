@@ -6,11 +6,6 @@ namespace J4JSoftware.Logging;
 
 public static class LoggerExtensions
 {
-    public const string CallerMemberElementName = "CallerName";
-    public const string CallerPathElementName = "CallerSourcePath";
-    public const string CallerLineNumElementName = "LineNumber";
-    public const string SendToSmsElementName = "SendToSms";
-
     private static readonly Dictionary<string, string?> AssemblySourceRoots = new();
 
     public static ILogger SourceCode(
@@ -27,9 +22,9 @@ public static class LoggerExtensions
         callerName = srcRoot == null ? callerName : callerName.Replace(srcRoot, string.Empty);
 
         return logger
-            .ForContext(CallerMemberElementName, callerName)
-            .ForContext(CallerPathElementName, sourceFilePath)
-            .ForContext(CallerLineNumElementName, sourceLineNumber);
+            .ForContext(LoggerTerms.CallerMemberElementName, callerName)
+            .ForContext(LoggerTerms.CallerPathElementName, sourceFilePath)
+            .ForContext(LoggerTerms.CallerLineNumElementName, sourceLineNumber);
     }
 
     private static string? GetSourceRoot(string callerName)
@@ -44,5 +39,5 @@ public static class LoggerExtensions
     }
 
     public static ILogger SendToSms(this ILogger logger, bool send = true) =>
-        send ? logger.ForContext(SendToSmsElementName, true) : logger;
+        send ? logger.ForContext(LoggerTerms.SendToSmsElementName, true) : logger;
 }
