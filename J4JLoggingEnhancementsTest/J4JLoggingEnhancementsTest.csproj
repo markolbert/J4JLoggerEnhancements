@@ -39,8 +39,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\J4JLoggerEnhancements\J4JLoggerEnhancements.csproj" />
-		<ProjectReference Include="..\J4JLoggerTwilio\J4JLoggerTwilio.csproj" />
+	  <ProjectReference Include="..\J4JLoggerSerilog\J4JLoggerSerilog.csproj" />
+	  <ProjectReference Include="..\J4JLoggerTwilio\J4JLoggerTwilio.csproj" />
 	</ItemGroup>
 
 </Project>

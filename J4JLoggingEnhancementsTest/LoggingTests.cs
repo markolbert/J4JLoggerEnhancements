@@ -17,7 +17,6 @@
 
 #endregion
 
-using System.ComponentModel;
 using FluentAssertions;
 using J4JLoggingEnhancementTests;
 using J4JSoftware.Logging;
@@ -48,8 +47,8 @@ public class LoggingTests : TestBase
     }
 
     [Theory]
-    [InlineData(LogSinks.Debug | LogSinks.LastEvent, LogEventLevel.Verbose, "WithSourceCodeInfo", "LoggingTests.cs", 58 )]
-    [InlineData(LogSinks.Debug | LogSinks.Twilio, LogEventLevel.Verbose, "WithSourceCodeInfo", "LoggingTests.cs", 58)]
+    [InlineData(LogSinks.Debug | LogSinks.LastEvent, LogEventLevel.Verbose, "WithSourceCodeInfo", "LoggingTests.cs", 57 )]
+    [InlineData(LogSinks.Debug | LogSinks.Twilio, LogEventLevel.Verbose, "WithSourceCodeInfo", "LoggingTests.cs", 57)]
     public void WithSourceCodeInfo(LogSinks sinks, LogEventLevel level, string callerName, string sourcePath, int lineNum)
     {
         var message = "This is a {0} log event to {1}";

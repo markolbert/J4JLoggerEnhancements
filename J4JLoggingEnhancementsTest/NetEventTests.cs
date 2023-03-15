@@ -17,11 +17,6 @@
 
 #endregion
 
-using System.ComponentModel;
-using FluentAssertions;
-using J4JSoftware.Logging;
-using Serilog.Events;
-
 namespace J4JLoggingEnhancementTests;
 
 public class NetEventTests : TestBase
