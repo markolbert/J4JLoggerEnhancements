@@ -1,18 +1,17 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
-using Serilog.Core;
-using Serilog.Events;
+﻿using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace J4JSoftware.Logging;
 
-public class SourcePathTrimmer : ILogEventEnricher
+public class SourcePathTrimmer 
 {
     private readonly List<string> _srcRootPaths = new();
-    private readonly StringComparison _fsComparer;
 
-    public SourcePathTrimmer()
+    protected SourcePathTrimmer(
+        StringComparison? fileSystemComparer = null
+    )
     {
-        _fsComparer = Environment.OSVersion.Platform switch
+        FileSystemComparer = fileSystemComparer ?? Environment.OSVersion.Platform switch
         {
             PlatformID.MacOSX => StringComparison.Ordinal,
             PlatformID.Unix => StringComparison.Ordinal,
@@ -20,6 +19,9 @@ public class SourcePathTrimmer : ILogEventEnricher
             _ => StringComparison.OrdinalIgnoreCase
         };
     }
+
+    public StringComparison FileSystemComparer { get; }
+    public ReadOnlyCollection<string> SourceRootPaths => _srcRootPaths.AsReadOnly();
 
     public void AddAssembly(Assembly assembly) => AddSourceCodeRootPath(assembly);
 
@@ -60,36 +62,4 @@ public class SourcePathTrimmer : ILogEventEnricher
     }
 
     public void AddAssembliesFromTypes(IEnumerable<Type> types) => AddAssembliesFromTypes(types.ToArray());
-
-    public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
-    {
-        var srcPathProp = logEvent.Properties
-            .FirstOrDefault(x => x.Key == LoggerExtensions.CallerPathElementName)
-            .Value?.ToString().Trim('"');
-
-        if (string.IsNullOrEmpty(srcPathProp))
-            return;
-
-        // see if we can trim the path
-        var matchingPath =
-            _srcRootPaths.FirstOrDefault(x => srcPathProp.IndexOf(x, StringComparison.OrdinalIgnoreCase) >= 0);
-
-        if (string.IsNullOrEmpty(matchingPath))
-            return;
-
-        var revised = srcPathProp.Replace(matchingPath, string.Empty, _fsComparer);
-
-        logEvent.AddOrUpdateProperty(UpdateSourcePath(propertyFactory,revised));
-    }
-
-    private LogEventProperty UpdateSourcePath(ILogEventPropertyFactory propertyFactory, string curPath )
-    {
-        return UpdateProperty(propertyFactory, curPath);
-    }
-
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    private static LogEventProperty UpdateProperty(ILogEventPropertyFactory propertyFactory, string curPath)
-    {
-        return propertyFactory.CreateProperty(LoggerExtensions.CallerPathElementName, curPath);
-    }
 }

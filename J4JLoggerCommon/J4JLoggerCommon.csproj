@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>J4JSoftware.LoggingCommon</AssemblyName>
+		<RootNamespace>J4JSoftware.Logging</RootNamespace>
+		<Authors>Mark A. Olbert</Authors>
+		<Company>Jump for Joy Software</Company>
+		<Product>Common support for J4JSoftware Logging Extensions</Product>
+		<Description>Common support for J4JSoftware Logging Extensions</Description>
+		<Copyright>© Mark A. Olbert all rights reserved</Copyright>
+		<PackageDescription>Common support for J4JSoftware Logging Extensions</PackageDescription>
+		<RepositoryUrl>https://github.com/markolbert/J4JLoggerEnhancements.git</RepositoryUrl>
+		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageIcon>Diego nuspec.png</PackageIcon>
+		<RepositoryType>git</RepositoryType>
+		<Version>0.5.0.0</Version>
+		<AssemblyVersion>0.5.0.0</AssemblyVersion>
+		<PackageReleaseNotes>initial release</PackageReleaseNotes>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="docs\" />
+		<Folder Include="docs\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\Media\JumpForJoy\Diego nuspec.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="../readme.md" Pack="true" PackagePath="/readme.md" />
+		<None Include="../LICENSE.md" />
+	</ItemGroup>
+
+</Project>
