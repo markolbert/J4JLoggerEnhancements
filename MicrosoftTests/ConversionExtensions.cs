@@ -4,7 +4,7 @@ using Serilog.Events;
 
 namespace MicrosoftTests;
 
-internal static class InMemoryExtensions
+internal static class ConversionExtensions
 {
     public static LogLevel ToMicrosoftLevel( this LogEventLevel serilogLevel ) =>
         serilogLevel switch
@@ -16,6 +16,18 @@ internal static class InMemoryExtensions
             LogEventLevel.Warning => LogLevel.Warning,
             LogEventLevel.Fatal => LogLevel.Critical,
             _ => throw new InvalidEnumArgumentException( $"Invalid {typeof( LogEventLevel )} '{serilogLevel}'" )
+        };
+
+    public static LogEventLevel ToSerilogLevel(this LogLevel msLevel) =>
+        msLevel switch
+        {
+            LogLevel.Trace => LogEventLevel.Verbose,
+            LogLevel.Debug => LogEventLevel.Debug,
+            LogLevel.Information => LogEventLevel.Information,
+            LogLevel.Error => LogEventLevel.Error,
+            LogLevel.Warning => LogEventLevel.Warning,
+            LogLevel.Critical=> LogEventLevel.Fatal,
+            _ => throw new InvalidEnumArgumentException($"Invalid {typeof(LogLevel)} '{msLevel}'")
         };
 
     public static List<object> ToPropertyValues( this IReadOnlyDictionary<string, LogEventPropertyValue> propertyValues )
