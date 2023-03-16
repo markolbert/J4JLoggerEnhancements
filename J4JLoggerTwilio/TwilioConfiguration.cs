@@ -22,13 +22,13 @@ namespace J4JSoftware.Logging
 {
     public class TwilioConfiguration
     {
-        public string? AccountSID { get; set; }
+        public string? AccountSid { get; set; }
         public string? AccountToken { get; set; }
         public string? FromNumber { get; set; }
         public List<string>? Recipients { get; set; }
 
         public bool IsValid =>
-            !string.IsNullOrEmpty( AccountSID )
+            !string.IsNullOrEmpty( AccountSid )
             && !string.IsNullOrEmpty( AccountToken )
             && !string.IsNullOrEmpty( FromNumber )
             && ( Recipients?.Any() ?? false );

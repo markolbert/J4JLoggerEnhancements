@@ -35,7 +35,7 @@ public static class TwilioLoggerExtensions
         if (!configValues.IsValid)
             throw new ArgumentException("Twilio configuration values are invalid");
 
-        TwilioClient.Init(configValues.AccountSID!, configValues.AccountToken!);
+        TwilioClient.Init(configValues.AccountSid!, configValues.AccountToken!);
 
         var sink = new TwilioSink(outputTemplate, configValues.FromNumber!, configValues.Recipients!)
         {
@@ -54,7 +54,7 @@ public static class TwilioLoggerExtensions
         if (!configValues.IsValid)
             throw new ArgumentException("Twilio configuration values are invalid");
 
-        TwilioClient.Init(configValues.AccountSID!, configValues.AccountToken!);
+        TwilioClient.Init(configValues.AccountSid!, configValues.AccountToken!);
 
         var sink = new TwilioSink(formatter, configValues.FromNumber!, configValues.Recipients!)
         {
