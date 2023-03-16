@@ -41,6 +41,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\J4JLoggerMicrosoft\J4JLoggerMicrosoft.csproj" />
 		<ProjectReference Include="..\J4JLoggerTwilio\J4JLoggerTwilio.csproj" />
+		<ProjectReference Include="..\LoggerConversions\LoggerConversions.csproj" />
 	</ItemGroup>
 
 </Project>
