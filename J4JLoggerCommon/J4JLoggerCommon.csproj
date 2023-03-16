@@ -24,7 +24,6 @@
 
 	<ItemGroup>
 		<Folder Include="docs\" />
-		<Folder Include="docs\" />
 	</ItemGroup>
 
 	<ItemGroup>
