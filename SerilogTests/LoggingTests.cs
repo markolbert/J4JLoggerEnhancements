@@ -2,7 +2,7 @@
 
 // Copyright 2021 Mark A. Olbert
 // 
-// This library or program 'J4JLoggingEnhancementTests' is free software: you can redistribute it
+// This library or program 'SerilogTests' is free software: you can redistribute it
 // and/or modify it under the terms of the GNU General Public License as
 // published by the Free Software Foundation, either version 3 of the License,
 // or (at your option) any later version.
@@ -18,11 +18,10 @@
 #endregion
 
 using FluentAssertions;
-using J4JLoggingEnhancementTests;
 using J4JSoftware.Logging;
 using Serilog.Events;
 
-namespace J4JLoggingEnhancementsTest;
+namespace SerilogTests;
 
 public class LoggingTests : TestBase
 {
@@ -47,8 +46,8 @@ public class LoggingTests : TestBase
     }
 
     [Theory]
-    [InlineData(LogSinks.Debug | LogSinks.LastEvent, LogEventLevel.Verbose, "WithSourceCodeInfo", "LoggingTests.cs", 57 )]
-    [InlineData(LogSinks.Debug | LogSinks.Twilio, LogEventLevel.Verbose, "WithSourceCodeInfo", "LoggingTests.cs", 57)]
+    [InlineData(LogSinks.Debug | LogSinks.LastEvent, LogEventLevel.Verbose, "WithSourceCodeInfo", "LoggingTests.cs", 56 )]
+    [InlineData(LogSinks.Debug | LogSinks.Twilio, LogEventLevel.Verbose, "WithSourceCodeInfo", "LoggingTests.cs", 56)]
     public void WithSourceCodeInfo(LogSinks sinks, LogEventLevel level, string callerName, string sourcePath, int lineNum)
     {
         var message = "This is a {0} log event to {1}";

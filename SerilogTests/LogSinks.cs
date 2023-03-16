@@ -1,4 +1,4 @@
-﻿namespace J4JLoggingEnhancementTests;
+﻿namespace SerilogTests;
 
 [Flags]
 public enum LogSinks

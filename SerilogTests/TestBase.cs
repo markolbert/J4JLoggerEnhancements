@@ -2,7 +2,7 @@
 
 // Copyright 2021 Mark A. Olbert
 // 
-// This library or program 'J4JLoggingEnhancementTests' is free software: you can redistribute it
+// This library or program 'SerilogTests' is free software: you can redistribute it
 // and/or modify it under the terms of the GNU General Public License as
 // published by the Free Software Foundation, either version 3 of the License,
 // or (at your option) any later version.
@@ -19,18 +19,19 @@
 
 using System.ComponentModel;
 using FluentAssertions;
-using J4JLoggingEnhancementsTest;
 using J4JSoftware.Logging;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
 
-namespace J4JLoggingEnhancementTests;
+namespace SerilogTests;
 
 public class TestBase
 {
     protected const string NoContextTemplate = "[{Level:u3}] {Message:lj}";
-    protected const string ContextTemplate = "[{Level:u3}] {Message:lj}{NewLine}{CallerName}{NewLine}{CallerSourcePath}:{LineNumber}";
+
+    protected const string ContextTemplate =
+        "[{Level:u3}] {Message:lj}{NewLine}{CallerName}{NewLine}{CallerSourcePath}:{LineNumber}";
 
     private readonly TwilioConfiguration _twilioConfig;
 
@@ -39,12 +40,12 @@ public class TestBase
         var configBuilder = new ConfigurationBuilder();
 
         var config = configBuilder
-            .AddUserSecrets<LoggingTests>()
-            .Build();
+                    .AddUserSecrets<LoggingTests>()
+                    .Build();
 
         var tempTwilio = new TwilioConfiguration();
-        var section = config.GetSection("Twilio");
-        section.Bind(tempTwilio);
+        var section = config.GetSection( "Twilio" );
+        section.Bind( tempTwilio );
         tempTwilio.Should().NotBeNull();
         tempTwilio.IsValid.Should().BeTrue();
         _twilioConfig = tempTwilio;
@@ -56,7 +57,7 @@ public class TestBase
     {
     }
 
-    protected ILogger GetLogger(LogSinks sinks, LogEventLevel minLevel, string outputTemplate )
+    protected ILogger GetLogger( LogSinks sinks, LogEventLevel minLevel, string outputTemplate )
     {
         LastEventSink = null;
         InMemorySink = null;
@@ -69,37 +70,37 @@ public class TestBase
             LogEventLevel.Warning => new LoggerConfiguration().MinimumLevel.Warning(),
             LogEventLevel.Error => new LoggerConfiguration().MinimumLevel.Error(),
             LogEventLevel.Fatal => new LoggerConfiguration().MinimumLevel.Fatal(),
-            _ => throw new InvalidEnumArgumentException($"Unsupported {typeof(LogEventLevel)} '{minLevel}'")
+            _ => throw new InvalidEnumArgumentException( $"Unsupported {typeof( LogEventLevel )} '{minLevel}'" )
         };
 
         loggerConfig = loggerConfig.Enrich.FromLogContext()
-            .Enrich.WithSourcePathTrimmer(typeof(TestBase));
+                                   .Enrich.WithSourcePathTrimmer( typeof( TestBase ) );
 
-        if ((sinks & LogSinks.Debug) == LogSinks.Debug)
-            loggerConfig = loggerConfig.WriteTo.Debug(minLevel, outputTemplate);
+        if( ( sinks & LogSinks.Debug ) == LogSinks.Debug )
+            loggerConfig = loggerConfig.WriteTo.Debug( minLevel, outputTemplate );
 
-        if ((sinks & LogSinks.InMemory) == LogSinks.InMemory)
+        if( ( sinks & LogSinks.InMemory ) == LogSinks.InMemory )
         {
-            loggerConfig = loggerConfig.WriteTo.InMemory(out var temp);
+            loggerConfig = loggerConfig.WriteTo.InMemory( out var temp );
             InMemorySink = temp;
         }
 
-        if ((sinks & LogSinks.LastEvent) == LogSinks.LastEvent)
+        if( ( sinks & LogSinks.LastEvent ) == LogSinks.LastEvent )
         {
-            loggerConfig = loggerConfig.WriteTo.LastEvent(out var temp, minLevel, outputTemplate);
+            loggerConfig = loggerConfig.WriteTo.LastEvent( out var temp, minLevel, outputTemplate );
             LastEventSink = temp;
         }
 
-        if ((sinks & LogSinks.NetEvent) == LogSinks.NetEvent)
-            loggerConfig = loggerConfig.WriteTo.NetEvent(minLevel, outputTemplate);
+        if( ( sinks & LogSinks.NetEvent ) == LogSinks.NetEvent )
+            loggerConfig = loggerConfig.WriteTo.NetEvent( minLevel, outputTemplate );
 
-        if ((sinks & LogSinks.Twilio) == LogSinks.Twilio)
-            loggerConfig = loggerConfig.WriteTo.Twilio(_twilioConfig, minLevel, outputTemplate);
+        if( ( sinks & LogSinks.Twilio ) == LogSinks.Twilio )
+            loggerConfig = loggerConfig.WriteTo.Twilio( _twilioConfig, minLevel, outputTemplate );
 
         return loggerConfig.CreateLogger();
     }
 
-    protected string FormatTemplate(string message, LogEventLevel level, params object[] args)
+    protected string FormatTemplate( string message, LogEventLevel level, params object[] args )
     {
         var threeLetter = level switch
         {
@@ -109,13 +110,13 @@ public class TestBase
             LogEventLevel.Warning => "WRN",
             LogEventLevel.Error => "ERR",
             LogEventLevel.Fatal => "FTL",
-            _ => throw new InvalidEnumArgumentException($"Unsupported {typeof(LogEventLevel)} value '{level}'")
+            _ => throw new InvalidEnumArgumentException( $"Unsupported {typeof( LogEventLevel )} value '{level}'" )
         };
 
-        for (var idx = 0; idx < args.Length; idx++)
+        for( var idx = 0; idx < args.Length; idx++ )
         {
-            var replacement = $"\"{args[idx]}\"";
-            message = message.Replace($"{{{idx}}}", replacement);
+            var replacement = $"\"{args[ idx ]}\"";
+            message = message.Replace( $"{{{idx}}}", replacement );
         }
 
         return $"[{threeLetter}] {message}";

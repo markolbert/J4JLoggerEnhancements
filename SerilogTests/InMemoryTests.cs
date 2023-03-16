@@ -1,9 +1,8 @@
 ﻿using FluentAssertions;
-using J4JLoggingEnhancementTests;
 using J4JSoftware.Logging;
 using Serilog.Events;
 
-namespace J4JLoggingEnhancementsTest;
+namespace SerilogTests;
 
 public class InMemoryTests : TestBase
 {
@@ -21,6 +20,6 @@ public class InMemoryTests : TestBase
 
         LastEventSink.Should().NotBeNull();
         LastEventSink!.LastLogMessage.Should().NotBeNull();
-        LastEventSink.LastLogMessage.Should().Be("[DBG] This is a test\r\nCachedTest\r\nInMemoryTests.cs:14");
+        LastEventSink.LastLogMessage.Should().Be("[DBG] This is a test\r\nCachedTest\r\nInMemoryTests.cs:13");
     }
 }
