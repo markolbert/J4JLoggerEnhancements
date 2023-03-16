@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AssemblyName>J4JSoftware.LoggingMicrosoft</AssemblyName>
+		<RootNamespace>J4JSoftware.Logging</RootNamespace>
+		<Authors>Mark A. Olbert</Authors>
+		<Company>Jump for Joy Software</Company>
+		<Product>J4JSoftware Logging Extensions for Microsoft</Product>
+		<Description>Enhancements to Microsoft ILogger to provide source code information and enable SMS logging using the appropriate underlying logger</Description>
+		<Copyright>© Mark A. Olbert all rights reserved</Copyright>
+		<PackageDescription>Enhancements to Microsoft ILogger to provide source code information and enable SMS logging using the appropriate underlying logger</PackageDescription>
+		<RepositoryUrl>https://github.com/markolbert/J4JLoggerEnhancements.git</RepositoryUrl>
+		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageIcon>Diego nuspec.png</PackageIcon>
+		<RepositoryType>git</RepositoryType>
+		<Version>0.5.0.0</Version>
+		<AssemblyVersion>0.5.0.0</AssemblyVersion>
+		<PackageReleaseNotes>initial release</PackageReleaseNotes>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="docs\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\Media\JumpForJoy\Diego nuspec.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="../readme.md" Pack="true" PackagePath="/readme.md" />
+		<None Include="../LICENSE.md" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\J4JLoggerCommon\J4JLoggerCommon.csproj" />
+	</ItemGroup>
+
+</Project>
