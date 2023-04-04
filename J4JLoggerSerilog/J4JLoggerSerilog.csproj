@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<AssemblyName>J4JSoftware.LoggingEnhancements</AssemblyName>
+		<AssemblyName>J4JSoftware.LoggingSerilog</AssemblyName>
 		<RootNamespace>J4JSoftware.Logging</RootNamespace>
 		<Authors>Mark A. Olbert</Authors>
 		<Company>Jump for Joy Software</Company>
