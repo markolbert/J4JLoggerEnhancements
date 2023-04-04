@@ -51,8 +51,6 @@ public class TestBase
         _twilioConfig = tempTwilio;
     }
 
-    private void LogEvent( object? sender, NetEventArgs e ) => OnNetEvent( e );
-
     protected virtual void OnNetEvent( NetEventArgs e )
     {
     }
@@ -92,7 +90,10 @@ public class TestBase
         }
 
         if( ( sinks & LogSinks.NetEvent ) == LogSinks.NetEvent )
-            loggerConfig = loggerConfig.WriteTo.NetEvent( minLevel, outputTemplate );
+        {
+            loggerConfig = loggerConfig.WriteTo.NetEvent( out var temp, minLevel, outputTemplate );
+            temp.LogEvent += ( _, args ) => OnNetEvent( args );
+        }
 
         if( ( sinks & LogSinks.Twilio ) == LogSinks.Twilio )
             loggerConfig = loggerConfig.WriteTo.Twilio( _twilioConfig, minLevel, outputTemplate );

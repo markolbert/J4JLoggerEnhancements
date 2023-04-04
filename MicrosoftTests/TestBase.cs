@@ -21,8 +21,6 @@ using System.ComponentModel;
 using FluentAssertions;
 using J4JSoftware.Logging;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
@@ -54,8 +52,6 @@ public class TestBase
         tempTwilio.IsValid.Should().BeTrue();
         _twilioConfig = tempTwilio;
     }
-
-    private void LogEvent( object? sender, NetEventArgs e ) => OnNetEvent( e );
 
     protected virtual void OnNetEvent( NetEventArgs e )
     {
@@ -107,7 +103,10 @@ public class TestBase
         }
 
         if( ( sinks & LogSinks.NetEvent ) == LogSinks.NetEvent )
-            loggerConfig = loggerConfig.WriteTo.NetEvent( minSerilog, outputTemplate );
+        {
+            loggerConfig = loggerConfig.WriteTo.NetEvent( out var temp, minSerilog, outputTemplate );
+            temp.LogEvent += ( _, args ) => OnNetEvent( args );
+        }
 
         if( ( sinks & LogSinks.Twilio ) == LogSinks.Twilio )
             loggerConfig = loggerConfig.WriteTo.Twilio( _twilioConfig, minSerilog, outputTemplate );
