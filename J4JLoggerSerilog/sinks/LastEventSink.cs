@@ -49,10 +49,13 @@ public class LastEventSink : ILogEventSink
         _sw = new StringWriter(_sb);
     }
 
+    public LogEvent LastLogEvent { get; private set; }
     public string? LastLogMessage { get; private set; }
 
     public void Emit( LogEvent logEvent )
     {
+        LastLogEvent = logEvent;
+
         _sb.Clear();
         _formatter.Format(logEvent, _sw);
         _sw.Flush();
