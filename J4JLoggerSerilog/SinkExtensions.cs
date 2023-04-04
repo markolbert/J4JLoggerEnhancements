@@ -26,40 +26,59 @@ namespace J4JSoftware.Logging;
 
 public static class SinkExtensions
 {
-    public static LoggerConfiguration InMemory(this LoggerSinkConfiguration config, out InMemorySink sink )
+    public static LoggerConfiguration InMemory( this LoggerSinkConfiguration config, out InMemorySink sink )
     {
         sink = new InMemorySink();
 
-        return config.Sink(sink, LogEventLevel.Verbose);
+        return config.Sink( sink, LogEventLevel.Verbose );
     }
 
-    public static LoggerConfiguration LastEvent(this LoggerSinkConfiguration loggerConfig,
+    public static LoggerConfiguration LastEvent(
+        this LoggerSinkConfiguration loggerConfig,
         out LastEventSink sink,
         LogEventLevel restrictedToMinimumLevel = LogEventLevel.Verbose,
-        string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+        string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+    )
     {
-        sink = new LastEventSink(outputTemplate);
+        sink = new LastEventSink( outputTemplate );
 
-        return loggerConfig.Sink(sink, restrictedToMinimumLevel);
+        return loggerConfig.Sink( sink, restrictedToMinimumLevel );
     }
 
-    public static LoggerConfiguration LastEvent(this LoggerSinkConfiguration loggerConfig,
+    public static LoggerConfiguration LastEvent(
+        this LoggerSinkConfiguration loggerConfig,
         ITextFormatter textFormatter,
         out LastEventSink sink,
-        LogEventLevel restrictedToMinimumLevel = LogEventLevel.Verbose)
+        LogEventLevel restrictedToMinimumLevel = LogEventLevel.Verbose
+    )
     {
-        sink = new LastEventSink(textFormatter);
+        sink = new LastEventSink( textFormatter );
 
-        return loggerConfig.Sink(sink, restrictedToMinimumLevel);
+        return loggerConfig.Sink( sink, restrictedToMinimumLevel );
     }
 
-    public static LoggerConfiguration NetEvent(this LoggerSinkConfiguration loggerConfig,
+    public static LoggerConfiguration NetEvent(
+        this LoggerSinkConfiguration loggerConfig,
+        out NetEventSink sink,
         LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-        string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}") =>
-        loggerConfig.Sink(new NetEventSink(outputTemplate), restrictedToMinimumLevel);
+        string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+    )
+    {
+        sink = new NetEventSink( outputTemplate );
 
-    public static LoggerConfiguration NetEvent(this LoggerSinkConfiguration loggerConfig,
+        return loggerConfig.Sink( sink, restrictedToMinimumLevel );
+    }
+
+    public static LoggerConfiguration NetEvent(
+        this LoggerSinkConfiguration loggerConfig,
         ITextFormatter textFormatter,
-        LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum) =>
-        loggerConfig.Sink(new NetEventSink(textFormatter), restrictedToMinimumLevel);
+        out NetEventSink sink,
+        LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
+        string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+    )
+    {
+        sink = new NetEventSink( outputTemplate );
+
+        return loggerConfig.Sink( new NetEventSink( textFormatter ), restrictedToMinimumLevel );
+    }
 }
