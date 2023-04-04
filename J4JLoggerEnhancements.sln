@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerilogTests", "SerilogTest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicrosoftTests", "MicrosoftTests\MicrosoftTests.csproj", "{6C45C6E2-379B-4974-A527-63DFDAC18C57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerConversions", "LoggerConversions\LoggerConversions.csproj", "{CE6845AF-EA3E-447C-9C5C-199A7C9BB908}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerConversions", "LoggerConversions\LoggerConversions.csproj", "{CE6845AF-EA3E-447C-9C5C-199A7C9BB908}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

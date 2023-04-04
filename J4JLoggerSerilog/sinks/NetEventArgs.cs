@@ -1,4 +1,5 @@
-﻿// Copyright (c) 2021, 2022 Mark A. Olbert 
+﻿#region copyright
+// Copyright (c) 2021, 2022, 2023 Mark A. Olbert 
 // 
 // This file is part of J4JLogger.
 //
@@ -14,6 +15,7 @@
 // 
 // You should have received a copy of the GNU General Public License along 
 // with J4JLogger. If not, see <https://www.gnu.org/licenses/>.
+#endregion
 
 using Serilog.Events;
 
