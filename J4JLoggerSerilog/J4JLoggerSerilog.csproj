@@ -11,8 +11,8 @@
 		<Product>J4JSoftware Logging Extensions for Serilog</Product>
 		<Description>Enhancements to Serilog ILogger to provide source code information and enable SMS logging</Description>
 		<Copyright>© Mark A. Olbert all rights reserved</Copyright>
-		<Version>1.0.0.0</Version>
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<Version>1.0.1.0</Version>
+		<AssemblyVersion>1.0.1.0</AssemblyVersion>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/markolbert/J4JLoggerEnhancements.git</RepositoryUrl>
 	</PropertyGroup>

@@ -11,8 +11,8 @@
 	  <Product>J4JSoftware Logging Conversions between Serilog and Microsoft</Product>
 	  <Description>Utilities for converting between Microsoft and Serilog logging environments</Description>
 	  <Copyright>© Mark A. Olbert all rights reserved</Copyright>
-	  <Version>1.0.0.0</Version>
-	  <AssemblyVersion>1.0.0.0</AssemblyVersion>
+	  <Version>1.0.1.0</Version>
+	  <AssemblyVersion>1.0.1.0</AssemblyVersion>
 	  <RepositoryType>git</RepositoryType>
 	  <RepositoryUrl>https://github.com/markolbert/J4JLoggerEnhancements.git</RepositoryUrl>
   </PropertyGroup>

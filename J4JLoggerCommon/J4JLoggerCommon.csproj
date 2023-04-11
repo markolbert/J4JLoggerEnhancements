@@ -12,8 +12,8 @@
 		<Copyright>© Mark A. Olbert all rights reserved</Copyright>
 		<PackageDescription>Common support for J4JSoftware Logging Extensions</PackageDescription>
 		<RepositoryUrl>https://github.com/markolbert/J4JLoggerEnhancements.git</RepositoryUrl>
-		<Version>1.0.0.0</Version>
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<Version>1.0.1.0</Version>
+		<AssemblyVersion>1.0.1.0</AssemblyVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
