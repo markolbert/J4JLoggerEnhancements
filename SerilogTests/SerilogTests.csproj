@@ -17,6 +17,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="J4JSoftware.J4JLoggerTwilio" Version="1.0.0" />
+		<PackageReference Include="J4JSoftware.LoggingSerilog" Version="1.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
@@ -33,11 +35,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\J4JLoggerSerilog\J4JLoggerSerilog.csproj" />
-	  <ProjectReference Include="..\J4JLoggerTwilio\J4JLoggerTwilio.csproj" />
 	</ItemGroup>
 
 </Project>

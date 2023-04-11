@@ -11,16 +11,10 @@
 	  <Product>J4JSoftware Twilio Serilog Sink</Product>
 	  <Description>Enables tweeting log events via Twilio</Description>
 	  <Copyright>© Mark A. Olbert all rights reserved</Copyright>
-	  <PackageDescription>Enables tweeting log events via Twilio</PackageDescription>
-	  <RepositoryUrl>https://github.com/markolbert/J4JLoggerEnhancements.git</RepositoryUrl>
-	  <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	  <PackageIcon>Diego nuspec.png</PackageIcon>
-	  <RepositoryType>git</RepositoryType>
 	  <Version>1.0.0.0</Version>
 	  <AssemblyVersion>1.0.0.0</AssemblyVersion>
-	  <PackageReleaseNotes>initial release</PackageReleaseNotes>
-	  <PackageReadmeFile>readme.md</PackageReadmeFile>
+	  <RepositoryType>git</RepositoryType>
+	  <RepositoryUrl>https://github.com/markolbert/J4JLoggerEnhancements.git</RepositoryUrl>
   </PropertyGroup>
 
 	<ItemGroup>
@@ -28,21 +22,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\licenses\GPLv3-2023.licenseheader" Link="GPLv3-2023.licenseheader" />
-		<None Include="..\..\Media\JumpForJoy\Diego nuspec.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
-		<None Include="../readme.md" Pack="true" PackagePath="/readme.md" />
-		<None Include="../LICENSE.md" />
-	</ItemGroup>
-
-	<ItemGroup>
+		<PackageReference Include="J4JSoftware.LoggingSerilog" Version="1.0.0" />
 		<PackageReference Include="Twilio" Version="6.2.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\J4JLoggerSerilog\J4JLoggerSerilog.csproj" />
 	</ItemGroup>
 
 </Project>

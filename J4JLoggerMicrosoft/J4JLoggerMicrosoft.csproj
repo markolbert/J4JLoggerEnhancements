@@ -13,14 +13,8 @@
 		<Copyright>© Mark A. Olbert all rights reserved</Copyright>
 		<PackageDescription>Enhancements to Microsoft ILogger to provide source code information and enable SMS logging using the appropriate underlying logger</PackageDescription>
 		<RepositoryUrl>https://github.com/markolbert/J4JLoggerEnhancements.git</RepositoryUrl>
-		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageIcon>Diego nuspec.png</PackageIcon>
-		<RepositoryType>git</RepositoryType>
 		<Version>1.0.0.0</Version>
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<PackageReleaseNotes>initial release</PackageReleaseNotes>
-		<PackageReadmeFile>readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -28,21 +22,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\licenses\GPLv3-2023.licenseheader" Link="GPLv3-2023.licenseheader" />
-		<None Include="..\..\Media\JumpForJoy\Diego nuspec.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
-		<None Include="../readme.md" Pack="true" PackagePath="/readme.md" />
-		<None Include="../LICENSE.md" />
-	</ItemGroup>
-
-	<ItemGroup>
+	  <PackageReference Include="J4JSoftware.LoggingCommon" Version="1.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\J4JLoggerCommon\J4JLoggerCommon.csproj" />
 	</ItemGroup>
 
 </Project>
